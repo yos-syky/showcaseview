@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'enum.dart';
 import 'get_position.dart';
 import 'measure_size.dart';
+import 'tooltip_action.dart';
 
 const _kDefaultPaddingFromParent = 14.0;
 
@@ -59,6 +60,7 @@ class ToolTipWidget extends StatefulWidget {
   final TooltipPosition? tooltipPosition;
   final EdgeInsets? titlePadding;
   final EdgeInsets? descriptionPadding;
+  final ToolTipAction? toolTipAction;
 
   const ToolTipWidget({
     Key? key,
@@ -90,6 +92,7 @@ class ToolTipWidget extends StatefulWidget {
     this.tooltipPosition,
     this.titlePadding,
     this.descriptionPadding,
+    this.toolTipAction,
   }) : super(key: key);
 
   @override
@@ -453,6 +456,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                                               ),
                                     ),
                                   ),
+                                  widget.toolTipAction ?? const SizedBox(),
                                 ],
                               ),
                             ),

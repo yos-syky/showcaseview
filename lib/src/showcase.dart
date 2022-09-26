@@ -32,6 +32,7 @@ import 'get_position.dart';
 import 'layout_overlays.dart';
 import 'shape_clipper.dart';
 import 'showcase_widget.dart';
+import 'tooltip_action.dart';
 import 'tooltip_widget.dart';
 
 class Showcase extends StatefulWidget {
@@ -232,6 +233,8 @@ class Showcase extends StatefulWidget {
   /// Provides padding around the description. Default padding is zero.
   final EdgeInsets? descriptionPadding;
 
+  final ToolTipAction? toolTipAction;
+
   const Showcase({
     required this.key,
     required this.child,
@@ -273,6 +276,7 @@ class Showcase extends StatefulWidget {
     this.tooltipPosition,
     this.titlePadding,
     this.descriptionPadding,
+    this.toolTipAction,
   })  : height = null,
         width = null,
         container = null,
@@ -327,6 +331,7 @@ class Showcase extends StatefulWidget {
         tooltipPadding = const EdgeInsets.symmetric(vertical: 8),
         titlePadding = null,
         descriptionPadding = null,
+        toolTipAction = null,
         assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
             "overlay opacity must be between 0 and 1.");
 
@@ -552,6 +557,7 @@ class _ShowcaseState extends State<Showcase> {
             tooltipPosition: widget.tooltipPosition,
             titlePadding: widget.titlePadding,
             descriptionPadding: widget.descriptionPadding,
+            toolTipAction: widget.toolTipAction,
           ),
         ],
       ],
