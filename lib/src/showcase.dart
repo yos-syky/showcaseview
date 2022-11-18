@@ -462,7 +462,12 @@ class _ShowcaseState extends State<Showcase> {
               GestureDetector(
                 onTap: () {
                   if (!showCaseWidgetState.disableBarrierInteraction) {
-                    _nextIfAny();
+                    if (showCaseWidgetState.onBarrierTap != null) {
+                      showCaseWidgetState.onBarrierTap
+                          ?.call(showCaseWidgetState.activeWidgetId);
+                    } else {
+                      _nextIfAny();
+                    }
                   }
                 },
                 child: ClipPath(

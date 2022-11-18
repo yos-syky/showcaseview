@@ -80,6 +80,11 @@ class ShowCaseWidget extends StatefulWidget {
   /// whether enabling auto scroll so as to make the target widget visible.
   final bool enableAutoScroll;
 
+  /// Triggered on barrier tap while while displaying showcase.
+  ///
+  /// Default to display next showcase
+  final Function(int?)? onBarrierTap;
+
   const ShowCaseWidget({
     required this.builder,
     this.onFinish,
@@ -94,6 +99,7 @@ class ShowCaseWidget extends StatefulWidget {
     this.disableScaleAnimation = false,
     this.enableAutoScroll = false,
     this.disableBarrierInteraction = false,
+    this.onBarrierTap,
   });
 
   static GlobalKey? activeTargetWidget(BuildContext context) {
@@ -125,6 +131,7 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
   late bool enableAutoPlayLock;
   late bool enableAutoScroll;
   late bool disableBarrierInteraction;
+  late Function(int?)? onBarrierTap;
 
   /// Returns value of  [ShowCaseWidget.blurValue]
   double get blurValue => widget.blurValue;
@@ -149,6 +156,7 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
     enableAutoPlayLock = widget.enableAutoPlayLock;
     enableAutoScroll = widget.enableAutoScroll;
     disableBarrierInteraction = widget.disableBarrierInteraction;
+    onBarrierTap = widget.onBarrierTap;
   }
 
   /// Starts Showcase view from the beginning of specified list of widget ids.

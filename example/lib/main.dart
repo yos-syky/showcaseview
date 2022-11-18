@@ -35,6 +35,13 @@ class MyApp extends StatelessWidget {
               );
             }
           },
+          onBarrierTap: (index){
+            print('object$index');
+            ///Throws Exception
+            ///
+            /// can be handle by context parameter - Not Recommended
+            ShowCaseWidget.of(context).next();
+          },
           blurValue: 1,
           builder: Builder(builder: (context) => const MailPage()),
           autoPlayDelay: const Duration(seconds: 3),
