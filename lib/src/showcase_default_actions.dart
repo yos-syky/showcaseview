@@ -22,7 +22,7 @@ class ShowCaseDefaultActions extends StatelessWidget {
     this.next = const ActionButtonConfig(),
     this.previous = const ActionButtonConfig(),
     this.stop = const ActionButtonConfig(),
-    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     this.mainAxisSize = MainAxisSize.max,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.textDirection,
@@ -104,22 +104,20 @@ class ShowCaseDefaultActions extends StatelessWidget {
 
   Widget _getButtonWidget(ActionButtonConfig actionConfig,
       BuildContext? showcaseContext, String buttonText, VoidCallback onClick) {
-    return Expanded(
-      child: Directionality(
-        textDirection: actionConfig.textDirection,
-        child: TextButton.icon(
-          label: actionConfig.buttonTextVisible
-              ? Text(
-                  buttonText,
-                  style: TextStyle(color: actionConfig.textColor),
-                )
-              : const SizedBox.shrink(),
-          icon: actionConfig.icon ?? const SizedBox.shrink(),
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                  actionConfig.textButtonBgColor)),
-          onPressed: onClick,
-        ),
+    return Directionality(
+      textDirection: actionConfig.textDirection,
+      child: TextButton.icon(
+        label: actionConfig.buttonTextVisible
+            ? Text(
+                buttonText,
+                style: TextStyle(color: actionConfig.textColor),
+              )
+            : const SizedBox.shrink(),
+        icon: actionConfig.icon ?? const SizedBox.shrink(),
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(
+                actionConfig.textButtonBgColor)),
+        onPressed: onClick,
       ),
     );
   }

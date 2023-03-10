@@ -499,8 +499,7 @@ class _ShowcaseState extends State<Showcase> {
                   child: ClipPath(
                     clipper: RRectClipper(
                       area: _isScrollRunning ? Rect.zero : rectBound,
-                      isCircle:
-                      widget.targetShapeBorder is CircleBorder,
+                      isCircle: widget.targetShapeBorder is CircleBorder,
                       radius: _isScrollRunning
                           ? BorderRadius.zero
                           : widget.targetBorderRadius,
@@ -579,7 +578,7 @@ class _ShowcaseState extends State<Showcase> {
                     actionSettings: widget.actionSettings,
                     actionButtonsPosition: widget.actionButtonsPosition,
                   ),
-  ],
+                ],
               ],
             ),
           )

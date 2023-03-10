@@ -190,6 +190,11 @@ class _MailPageState extends State<MailPage> {
                                           color: Theme.of(context).primaryColor,
                                         ),
                                       ),
+                                      // actionSettings: ActionsSettings(
+                                      //   containerHeight: 100,
+                                      //   containerColor: Colors.indigoAccent,
+                                      //   containerWidth: 300
+                                      // ),
                                       actions: ShowCaseDefaultActions(
                                         previous: ActionButtonConfig(
                                           icon: Image.asset(
@@ -197,7 +202,7 @@ class _MailPageState extends State<MailPage> {
                                             color:
                                                 Theme.of(context).primaryColor,
                                           ),
-                                            buttonTextVisible: false,
+                                          buttonTextVisible: false,
                                         ),
                                         next: ActionButtonConfig(
                                           icon: Image.asset(
@@ -346,6 +351,7 @@ class _MailPageState extends State<MailPage> {
           ),
         ),
         actions: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
               onPressed: () {
