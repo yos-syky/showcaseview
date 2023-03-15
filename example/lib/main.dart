@@ -236,6 +236,23 @@ class _MailPageState extends State<MailPage> {
                         ),
                         child: Image.asset('assets/simform.png'),
                       ),
+                      toolTipAction: ToolTipAction.defaultAction(
+                        actionOne: ActionWidgetConfig(
+                          actionTitle: 'Prev',
+                          onActionTap: ShowCaseWidget.of(context).previous,
+                          textStyle: const TextStyle(color: Colors.white),
+                        ),
+                        actionTwo: ActionWidgetConfig(
+                          actionTitle: 'Next',
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          onActionTap: ShowCaseWidget.of(context).next,
+                        ),
+                        actionPadding: const EdgeInsets.symmetric(vertical: 5),
+                      ),
                     ),
                     const SizedBox(
                       width: 12,
@@ -315,27 +332,28 @@ class _MailPageState extends State<MailPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Showcase(
-            key: key,
-            description: 'Tap to check mail',
-            tooltipPosition: TooltipPosition.top,
-            disposeOnTap: true,
-            onTargetClick: () {
-              Navigator.push<void>(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (_) => const Detail(),
-                ),
-              ).then((_) {
-                setState(() {
-                  ShowCaseWidget.of(context).startShowCase([_four, _five]);
-                });
+          key: key,
+          description: 'Tap to check mail',
+          tooltipPosition: TooltipPosition.top,
+          disposeOnTap: true,
+          onTargetClick: () {
+            Navigator.push<void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => const Detail(),
+              ),
+            ).then((_) {
+              setState(() {
+                ShowCaseWidget.of(context).startShowCase([_four, _five]);
               });
-            },
-            child: MailTile(
-              mail: mail,
-              showCaseKey: _four,
-              showCaseDetail: showCaseDetail,
-            )),
+            });
+          },
+          child: MailTile(
+            mail: mail,
+            showCaseKey: _four,
+            showCaseDetail: showCaseDetail,
+          ),
+        ),
       ),
     );
   }

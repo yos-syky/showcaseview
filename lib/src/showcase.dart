@@ -31,7 +31,9 @@ import 'extension.dart';
 import 'get_position.dart';
 import 'layout_overlays.dart';
 import 'shape_clipper.dart';
+import 'showcase_context_provider.dart';
 import 'showcase_widget.dart';
+import 'tooltip_action.dart';
 import 'tooltip_widget.dart';
 
 class Showcase extends StatefulWidget {
@@ -232,6 +234,9 @@ class Showcase extends StatefulWidget {
   /// Provides padding around the description. Default padding is zero.
   final EdgeInsets? descriptionPadding;
 
+  /// Provides tooltip action
+  final ToolTipAction? toolTipAction;
+
   /// Provides text direction of tooltip title.
   final TextDirection? titleTextDirection;
 
@@ -285,6 +290,7 @@ class Showcase extends StatefulWidget {
     this.tooltipPosition,
     this.titlePadding,
     this.descriptionPadding,
+    this.toolTipAction = const ToolTipAction.defaultAction(),
     this.titleTextDirection,
     this.descriptionTextDirection,
     this.onBarrierClick,
@@ -343,6 +349,7 @@ class Showcase extends StatefulWidget {
         tooltipPadding = const EdgeInsets.symmetric(vertical: 8),
         titlePadding = null,
         descriptionPadding = null,
+        toolTipAction = null,
         titleTextDirection = null,
         descriptionTextDirection = null,
         assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
@@ -540,39 +547,43 @@ class _ShowcaseState extends State<Showcase> {
             shapeBorder: widget.targetShapeBorder,
             disableDefaultChildGestures: widget.disableDefaultTargetGestures,
           ),
-          ToolTipWidget(
-            position: position,
-            offset: offset,
-            screenSize: screenSize,
-            title: widget.title,
-            titleAlignment: widget.titleAlignment,
-            description: widget.description,
-            descriptionAlignment: widget.descriptionAlignment,
-            titleTextStyle: widget.titleTextStyle,
-            descTextStyle: widget.descTextStyle,
-            container: widget.container,
-            tooltipBackgroundColor: widget.tooltipBackgroundColor,
-            textColor: widget.textColor,
-            showArrow: widget.showArrow,
-            contentHeight: widget.height,
-            contentWidth: widget.width,
-            onTooltipTap: _getOnTooltipTap,
-            tooltipPadding: widget.tooltipPadding,
-            disableMovingAnimation: widget.disableMovingAnimation ??
-                showCaseWidgetState.disableMovingAnimation,
-            disableScaleAnimation: widget.disableScaleAnimation ??
-                showCaseWidgetState.disableScaleAnimation,
-            movingAnimationDuration: widget.movingAnimationDuration,
-            tooltipBorderRadius: widget.tooltipBorderRadius,
-            scaleAnimationDuration: widget.scaleAnimationDuration,
-            scaleAnimationCurve: widget.scaleAnimationCurve,
-            scaleAnimationAlignment: widget.scaleAnimationAlignment,
-            isTooltipDismissed: _isTooltipDismissed,
-            tooltipPosition: widget.tooltipPosition,
-            titlePadding: widget.titlePadding,
-            descriptionPadding: widget.descriptionPadding,
-            titleTextDirection: widget.titleTextDirection,
-            descriptionTextDirection: widget.descriptionTextDirection,
+          ShowcaseContextProvider(
+            context: context,
+            child: ToolTipWidget(
+              position: position,
+              offset: offset,
+              screenSize: screenSize,
+              title: widget.title,
+              titleAlignment: widget.titleAlignment,
+              description: widget.description,
+              descriptionAlignment: widget.descriptionAlignment,
+              titleTextStyle: widget.titleTextStyle,
+              descTextStyle: widget.descTextStyle,
+              container: widget.container,
+              tooltipBackgroundColor: widget.tooltipBackgroundColor,
+              textColor: widget.textColor,
+              showArrow: widget.showArrow,
+              contentHeight: widget.height,
+              contentWidth: widget.width,
+              onTooltipTap: _getOnTooltipTap,
+              tooltipPadding: widget.tooltipPadding,
+              disableMovingAnimation: widget.disableMovingAnimation ??
+                  showCaseWidgetState.disableMovingAnimation,
+              disableScaleAnimation: widget.disableScaleAnimation ??
+                  showCaseWidgetState.disableScaleAnimation,
+              movingAnimationDuration: widget.movingAnimationDuration,
+              tooltipBorderRadius: widget.tooltipBorderRadius,
+              scaleAnimationDuration: widget.scaleAnimationDuration,
+              scaleAnimationCurve: widget.scaleAnimationCurve,
+              scaleAnimationAlignment: widget.scaleAnimationAlignment,
+              isTooltipDismissed: _isTooltipDismissed,
+              tooltipPosition: widget.tooltipPosition,
+              titlePadding: widget.titlePadding,
+              descriptionPadding: widget.descriptionPadding,
+              toolTipAction: widget.toolTipAction,
+              titleTextDirection: widget.titleTextDirection,
+              descriptionTextDirection: widget.descriptionTextDirection,
+            ),
           ),
         ],
       ],
