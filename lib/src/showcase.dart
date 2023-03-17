@@ -238,6 +238,14 @@ class Showcase extends StatefulWidget {
   /// Provides text direction of tooltip description.
   final TextDirection? descriptionTextDirection;
 
+  /// Provides a callback when barrier has been clicked.
+  ///
+  /// Note-: Even if barrier interactions are disabled, this handler
+  /// will still provide a callback.
+  final VoidCallback? onBarrierClick;
+
+  final bool showShadow;
+
   const Showcase({
     required this.key,
     required this.child,
@@ -254,6 +262,7 @@ class Showcase extends StatefulWidget {
     this.descTextStyle,
     this.tooltipBackgroundColor = Colors.white,
     this.textColor = Colors.black,
+    this.showShadow = false,
     this.scrollLoadingWidget = const CircularProgressIndicator(
       valueColor: AlwaysStoppedAnimation(Colors.white),
     ),
@@ -281,6 +290,7 @@ class Showcase extends StatefulWidget {
     this.descriptionPadding,
     this.titleTextDirection,
     this.descriptionTextDirection,
+    this.onBarrierClick,
   })  : height = null,
         width = null,
         container = null,
@@ -317,7 +327,9 @@ class Showcase extends StatefulWidget {
     this.onTargetDoubleTap,
     this.disableDefaultTargetGestures = false,
     this.tooltipPosition,
+    this.onBarrierClick,
   })  : showArrow = false,
+        showShadow = false,
         onToolTipClick = null,
         scaleAnimationDuration = const Duration(milliseconds: 300),
         scaleAnimationCurve = Curves.decelerate,
@@ -417,7 +429,23 @@ class _ShowcaseState extends State<Showcase> {
           return buildOverlayOnTarget(offset, rectBound.size, rectBound, size);
         },
         showOverlay: true,
-        child: widget.child,
+        child: Container(
+          decoration: widget.showShadow
+              ? BoxDecoration(
+                  backgroundBlendMode:
+                      widget.showShadow ? BlendMode.dstOut : null,
+                  color: Colors.transparent,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 2,
+                      spreadRadius: 10,
+                      blurStyle: BlurStyle.outer,
+                    )
+                  ],
+                )
+              : null,
+          child: widget.child,
+        ),
       );
     }
     return widget.child;
@@ -486,6 +514,7 @@ class _ShowcaseState extends State<Showcase> {
             if (!showCaseWidgetState.disableBarrierInteraction) {
               _nextIfAny();
             }
+            widget.onBarrierClick?.call();
           },
           child: ClipPath(
             clipper: RRectClipper(
@@ -504,17 +533,28 @@ class _ShowcaseState extends State<Showcase> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
                       decoration: BoxDecoration(
-                        color: widget.overlayColor
-                            .withOpacity(widget.overlayOpacity),
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.yellow.withOpacity(.4),
+                            Colors.green.withOpacity(.4),
+                            Colors.yellow.withOpacity(.4),
+                          ],
+                          end: Alignment.topCenter,
+                          begin: Alignment.bottomCenter,
+                          stops: const [.2, .4, 1],
+                        ),
                       ),
                     ),
                   )
                 : Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      color: widget.overlayColor
-                          .withOpacity(widget.overlayOpacity),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Colors.red,
+                        Colors.green,
+                        Colors.yellow,
+                      ], tileMode: TileMode.repeated),
                     ),
                   ),
           ),

@@ -179,9 +179,11 @@ class _MailPageState extends State<MailPage> {
                                 child: Row(
                                   children: <Widget>[
                                     Showcase(
-                                      key: _one,
+                                      key: _three,
                                       description: 'Tap to see menu options',
                                       disableDefaultTargetGestures: true,
+                                      onBarrierClick: () =>
+                                          debugPrint('Barrier clicked'),
                                       child: GestureDetector(
                                         onTap: () =>
                                             debugPrint('menu button clicked'),
@@ -263,7 +265,7 @@ class _MailPageState extends State<MailPage> {
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    return showcaseMailTile(_three, true, context, mails.first);
+                    return showcaseMailTile(_one, true, context, mails.first);
                   }
                   return MailTile(
                     mail: mails[index % mails.length],
@@ -315,6 +317,7 @@ class _MailPageState extends State<MailPage> {
         child: Showcase(
             key: key,
             description: 'Tap to check mail',
+            showShadow: true,
             tooltipPosition: TooltipPosition.top,
             disposeOnTap: true,
             onTargetClick: () {
