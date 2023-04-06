@@ -26,9 +26,11 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'custom_decoration.dart';
 import 'enum.dart';
 import 'extension.dart';
 import 'get_position.dart';
+import 'gradient_helper.dart';
 import 'layout_overlays.dart';
 import 'shape_clipper.dart';
 import 'showcase_widget.dart';
@@ -417,6 +419,7 @@ class _ShowcaseState extends State<Showcase> {
   @override
   Widget build(BuildContext context) {
     if (_enableShowcase) {
+      var radius = position?.getWidgetRadius() ?? 0;
       return AnchoredOverlay(
         overlayBuilder: (context, rectBound, offset) {
           final size = MediaQuery.of(context).size;
@@ -426,24 +429,11 @@ class _ShowcaseState extends State<Showcase> {
             screenWidth: size.width,
             screenHeight: size.height,
           );
-          return buildOverlayOnTarget(offset, rectBound.size, rectBound, size);
+          return buildOverlayOnTarget(offset, rectBound.size, rectBound, size,radius);
         },
         showOverlay: true,
-        child: Container(
-          decoration: widget.showShadow
-              ? BoxDecoration(
-                  backgroundBlendMode:
-                      widget.showShadow ? BlendMode.dstOut : null,
-                  color: Colors.transparent,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 2,
-                      spreadRadius: 10,
-                      blurStyle: BlurStyle.outer,
-                    )
-                  ],
-                )
-              : null,
+        child: DecoratedBox(
+          decoration: const BoxDecoration(shape: BoxShape.rectangle),
           child: widget.child,
         ),
       );
@@ -495,6 +485,7 @@ class _ShowcaseState extends State<Showcase> {
     Size size,
     Rect rectBound,
     Size screenSize,
+      double radius,
   ) {
     var blur = 0.0;
     if (_showShowCase) {
@@ -506,7 +497,6 @@ class _ShowcaseState extends State<Showcase> {
     blur = kIsWeb && blur < 0 ? 0 : blur;
 
     if (!_showShowCase) return const Offstage();
-
     return Stack(
       children: [
         GestureDetector(
@@ -516,48 +506,41 @@ class _ShowcaseState extends State<Showcase> {
             }
             widget.onBarrierClick?.call();
           },
-          child: ClipPath(
-            clipper: RRectClipper(
-              area: _isScrollRunning ? Rect.zero : rectBound,
-              isCircle: widget.targetShapeBorder is CircleBorder,
-              radius: _isScrollRunning
-                  ? BorderRadius.zero
-                  : widget.targetBorderRadius,
-              overlayPadding:
-                  _isScrollRunning ? EdgeInsets.zero : widget.targetPadding,
-            ),
-            child: blur != 0
-                ? BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.yellow.withOpacity(.4),
-                            Colors.green.withOpacity(.4),
-                            Colors.yellow.withOpacity(.4),
-                          ],
-                          end: Alignment.topCenter,
-                          begin: Alignment.bottomCenter,
-                          stops: const [.2, .4, 1],
-                        ),
-                      ),
+          child: blur != 0
+              ? CustomPaint(
+                  painter: OverlayPainter(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff340048).withOpacity(0.4),
+                        Color(0xff240032).withOpacity(.85),
+                        Color(0xff240032).withOpacity(.85),
+                      ],
+                      end: Alignment.bottomCenter,
+                      begin: Alignment.topCenter,
+                      stops: [.1, .15, 0.02],
                     ),
-                  )
-                : Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(colors: [
+                    radius: radius,
+                    rect: rectBound,
+                    shadow: const BoxShadow(
+                      color: Color(0xB2212121),
+                      blurRadius: 4,
+                    ),
+                  ),
+                  child: Container(),
+                )
+              : Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
                         Colors.red,
                         Colors.green,
                         Colors.yellow,
-                      ], tileMode: TileMode.repeated),
+                      ],
                     ),
                   ),
-          ),
+                ),
         ),
         if (_isScrollRunning) Center(child: widget.scrollLoadingWidget),
         if (!_isScrollRunning) ...[

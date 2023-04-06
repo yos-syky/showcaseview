@@ -20,7 +20,13 @@
  * SOFTWARE.
  */
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
+import '../showcaseview.dart';
+import 'layout_overlays.dart';
 
 class GetPosition {
   final GlobalKey? key;
@@ -39,6 +45,7 @@ class GetPosition {
     final box = key!.currentContext!.findRenderObject() as RenderBox;
 
     var boxOffset = box.localToGlobal(const Offset(0.0, 0.0));
+
     if (boxOffset.dx.isNaN || boxOffset.dy.isNaN) {
       return const Rect.fromLTRB(0, 0, 0, 0);
     }
@@ -100,4 +107,19 @@ class GetPosition {
   double getWidth() => getRight() - getLeft();
 
   double getCenter() => (getLeft() + getRight()) / 2;
+
+  double getWidgetRadius() {
+    BuildContext? context = key!.currentContext;
+    var showcase = context?.widget;
+    if (showcase is Showcase) {
+      var gestureDetector = (showcase).child;
+      if (gestureDetector is GestureDetector) {
+        var clipRRect = gestureDetector.child;
+        if (clipRRect is ClipRRect) {
+          return (clipRRect.borderRadius as BorderRadius).topRight.x;
+        }
+      }
+    }
+    return 0;
+  }
 }

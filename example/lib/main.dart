@@ -179,17 +179,24 @@ class _MailPageState extends State<MailPage> {
                                 child: Row(
                                   children: <Widget>[
                                     Showcase(
-                                      key: _three,
+                                      key: _one,
                                       description: 'Tap to see menu options',
                                       disableDefaultTargetGestures: true,
+                                      targetBorderRadius:
+                                          BorderRadius.circular(20),
                                       onBarrierClick: () =>
                                           debugPrint('Barrier clicked'),
                                       child: GestureDetector(
                                         onTap: () =>
                                             debugPrint('menu button clicked'),
-                                        child: Icon(
-                                          Icons.menu,
-                                          color: Theme.of(context).primaryColor,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Icon(
+                                            Icons.menu,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -226,15 +233,20 @@ class _MailPageState extends State<MailPage> {
                       tooltipBackgroundColor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       targetShapeBorder: const CircleBorder(),
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        width: 45,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).primaryColor,
+                      child: GestureDetector(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            child: Image.asset('assets/simform.png'),
+                          ),
                         ),
-                        child: Image.asset('assets/simform.png'),
                       ),
                     ),
                     const SizedBox(
@@ -265,7 +277,7 @@ class _MailPageState extends State<MailPage> {
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    return showcaseMailTile(_one, true, context, mails.first);
+                    return showcaseMailTile(_three, true, context, mails.first);
                   }
                   return MailTile(
                     mail: mails[index % mails.length],
