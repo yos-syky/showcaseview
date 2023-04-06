@@ -244,6 +244,13 @@ class Showcase extends StatefulWidget {
   /// will still provide a callback.
   final VoidCallback? onBarrierClick;
 
+  /// Define End distance of tooltip position when tooltip is moving.
+  ///
+  /// Which is from 0 to movingEndDistance (positive)
+  ///
+  /// Default to '7.0'
+  final double movingEndDistance;
+
   const Showcase({
     required this.key,
     required this.description,
@@ -288,6 +295,7 @@ class Showcase extends StatefulWidget {
     this.titleTextDirection,
     this.descriptionTextDirection,
     this.onBarrierClick,
+    this.movingEndDistance = 7.0,
   })  : height = null,
         width = null,
         container = null,
@@ -325,6 +333,7 @@ class Showcase extends StatefulWidget {
     this.disableDefaultTargetGestures = false,
     this.tooltipPosition,
     this.onBarrierClick,
+    this.movingEndDistance = 7.0,
   })  : showArrow = false,
         onToolTipClick = null,
         scaleAnimationDuration = const Duration(milliseconds: 300),
@@ -573,6 +582,7 @@ class _ShowcaseState extends State<Showcase> {
             descriptionPadding: widget.descriptionPadding,
             titleTextDirection: widget.titleTextDirection,
             descriptionTextDirection: widget.descriptionTextDirection,
+            movingEndDistance: widget.movingEndDistance,
           ),
         ],
       ],
