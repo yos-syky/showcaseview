@@ -20,4 +20,18 @@
  * SOFTWARE.
  */
 
-enum TooltipPosition { top, bottom }
+enum TooltipPosition { left, top, right, bottom }
+
+extension TooltipPositionExtension on TooltipPosition {
+  bool get isLeft => this == TooltipPosition.left;
+
+  bool get isTop => this == TooltipPosition.top;
+
+  bool get isRight => this == TooltipPosition.right;
+
+  bool get isBottom => this == TooltipPosition.bottom;
+
+  bool get isVertical => isTop || isBottom;
+
+  bool get isHorizontal => isRight || isLeft;
+}
