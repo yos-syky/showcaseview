@@ -22,5 +22,6 @@
 
 library showcaseview;
 
+export 'src/enums.dart';
 export 'src/showcase.dart';
 export 'src/showcase_widget.dart';

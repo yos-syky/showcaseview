@@ -24,6 +24,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'enums.dart';
 import 'get_position.dart';
 import 'measure_size.dart';
 
@@ -46,6 +47,8 @@ class ToolTipWidget extends StatefulWidget {
   final Duration animationDuration;
   final bool disableAnimation;
   final BorderRadius? borderRadius;
+  final TooltipPosition? tooltipPosition;
+  final TooltipAlignment? tooltipAlignment;
 
   const ToolTipWidget({
     Key? key,
@@ -67,6 +70,8 @@ class ToolTipWidget extends StatefulWidget {
     this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
     required this.disableAnimation,
     required this.borderRadius,
+    this.tooltipPosition,
+    this.tooltipAlignment,
   }) : super(key: key);
 
   @override
@@ -94,11 +99,11 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
         topPosition >= height;
   }
 
-  String findPositionForContent(Offset position) {
+  TooltipPosition findPositionForContent(Offset position) {
     if (isCloseToTopOrBottom(position)) {
-      return 'ABOVE';
+      return TooltipPosition.above;
     } else {
-      return 'BELOW';
+      return TooltipPosition.below;
     }
   }
 
@@ -220,8 +225,10 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
   @override
   Widget build(BuildContext context) {
     position = widget.offset;
-    final contentOrientation = findPositionForContent(position!);
-    final contentOffsetMultiplier = contentOrientation == "BELOW" ? 1.0 : -1.0;
+    final contentOrientation =
+        widget.tooltipPosition ?? findPositionForContent(position!);
+    final contentOffsetMultiplier =
+        contentOrientation == TooltipPosition.below ? 1.0 : -1.0;
     isArrowUp = contentOffsetMultiplier == 1.0;
 
     final contentY = isArrowUp
@@ -360,12 +367,24 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
         ),
       );
     } else {
+      var alignment = Alignment.center;
+
+      if (widget.tooltipAlignment == null) {
+        if (_isLeft()) {
+          alignment = Alignment.centerLeft;
+        } else if (_isRight()) {
+          alignment = Alignment.centerRight;
+        }
+      } else {
+        alignment = widget.tooltipAlignment!.value;
+      }
+
       return Stack(
         children: <Widget>[
           Positioned(
-            left: 0,
-            right: 0,
-            top: contentY - 10,
+            left: 24,
+            right: 24,
+            top: contentY,
             child: FractionalTranslation(
               translation: Offset(0.0, contentFractionalOffset as double),
               child: SlideTransition(
@@ -380,21 +399,21 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                   child: GestureDetector(
                     onTap: widget.onTooltipTap,
                     child: Container(
+                      alignment: alignment,
                       padding: EdgeInsets.only(
                         top: paddingTop,
                       ),
                       color: Colors.transparent,
-                      child: Center(
-                        child: MeasureSize(
-                            onSizeChange: (size) {
-                              setState(() {
-                                var tempPos = position;
-                                tempPos = Offset(
-                                    position!.dx, position!.dy + size!.height);
-                                position = tempPos;
-                              });
-                            },
-                            child: widget.container),
+                      child: MeasureSize(
+                        onSizeChange: (size) {
+                          setState(() {
+                            var tempPos = position;
+                            tempPos = Offset(
+                                position!.dx, position!.dy + size!.height);
+                            position = tempPos;
+                          });
+                        },
+                        child: widget.container,
                       ),
                     ),
                   ),
