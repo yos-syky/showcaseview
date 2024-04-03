@@ -26,7 +26,7 @@ import '../showcaseview.dart';
 
 class ShowCaseWidget extends StatefulWidget {
   final Builder builder;
-  final VoidCallback? onFinish;
+  final Function(GlobalKey?)? onFinish;
   final Function(int?, GlobalKey)? onStart;
   final Function(int?, GlobalKey)? onComplete;
   final bool autoPlay;
@@ -126,12 +126,12 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
       setState(() {
         _onComplete();
         activeWidgetId = activeWidgetId! + 1;
-        _onStart();
+        var latestId = _onStart();
 
         if (activeWidgetId! >= ids!.length) {
           _cleanupAfterSteps();
           if (widget.onFinish != null) {
-            widget.onFinish!();
+            widget.onFinish!(latestId);
           }
         }
       });
@@ -143,12 +143,12 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
       setState(() {
         _onComplete();
         activeWidgetId = activeWidgetId! + 1;
-        _onStart();
+        var latestId = _onStart();
 
         if (activeWidgetId! >= ids!.length) {
           _cleanupAfterSteps();
           if (widget.onFinish != null) {
-            widget.onFinish!();
+            widget.onFinish!(latestId);
           }
         }
       });
@@ -163,9 +163,6 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
         _onStart();
         if (activeWidgetId! >= ids!.length) {
           _cleanupAfterSteps();
-          if (widget.onFinish != null) {
-            widget.onFinish!();
-          }
         }
       });
     }
@@ -175,17 +172,22 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
     if (mounted) {
       setState(
         () {
+          widget.onFinish?.call(ids?[activeWidgetId!]);
           _cleanupAfterSteps();
-          widget.onFinish?.call();
         },
       );
     }
   }
 
-  void _onStart() {
+  GlobalKey<State<StatefulWidget>>? _onStart() {
+    GlobalKey? id;
     if (activeWidgetId! < ids!.length) {
-      widget.onStart?.call(activeWidgetId, ids![activeWidgetId!]);
+      id = ids![activeWidgetId!];
+      widget.onStart?.call(activeWidgetId, id);
+    } else {
+      id = ids![activeWidgetId! - 1];
     }
+    return id;
   }
 
   void _onComplete() {
